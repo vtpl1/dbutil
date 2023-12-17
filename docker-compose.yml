@@ -1,0 +1,88 @@
+version: "3"
+
+volumes:
+  cachedb:
+  datadb:
+  mysql_datadb:
+    # driver: local
+    # driver_opts:
+    #    o: bind
+    #    type: none
+    #    device: /media/vadmin/WorkFilesLinux/database/graph_view_mysql_db
+
+networks:
+  net:
+
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - net
+    ports:
+      - 8000:8000
+      - 58000:58000
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    # network_mode: service:mongo
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: restheart
+      MONGO_INITDB_ROOT_PASSWORD: R3ste4rt!
+      # MONGO_INITDB_DATABASE: your-database-here
+    restart: unless-stopped
+    volumes:
+      - datadb:/data/db
+    # ports:
+    #   - 27017:27017
+    networks:
+      - net
+    # Add "forwardPorts": ["27017"] to **devcontainer.json** to forward MongoDB locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  mysql:
+    image: mysql:8-debian
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    volumes:
+      - mysql_datadb:/var/lib/mysql
+      # - /media/vadmin/WorkFilesLinux/database/graph_view_mysql_db:/var/lib/mysql
+    security_opt:
+      - seccomp:unconfined
+    # cap_add:
+    #   - SYS_NICE  # CAP_SYS_NICE
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - net
+    ports:
+      - 3306:3306
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: restheart
+      POSTGRES_PASSWORD: R3ste4rt!
+    restart: unless-stopped
+    volumes:
+      - cachedb:/var/lib/postgresql/data
+    # ports:
+    #   - 5432:5432
+    networks:
+      - net
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    networks:
+      - net
