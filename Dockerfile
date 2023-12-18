@@ -10,7 +10,7 @@ RUN wget -O cmake.sh https://github.com/Kitware/CMake/releases/download/v3.28.1/
     && sh cmake.sh --prefix=/usr/local/ --exclude-subdir && rm -rf cmake.sh
 
 # RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
-RUN wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && bash -c ./llvm.sh all
+RUN wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && ./llvm.sh all
 
 ENV PATH="${PATH}:/usr/lib/llvm-17/bin"
 
