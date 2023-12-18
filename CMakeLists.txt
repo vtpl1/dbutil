@@ -10,7 +10,7 @@ project(dbutil
 	DESCRIPTION "A simple wrapper around poco data"
 	HOMEPAGE_URL "https://github.com/vtpl1/dbutil"
 	LANGUAGES CXX)
-set(COMPONENT1 core)
+set(COMPONENT1 dbutil)
 find_package(Poco REQUIRED Data)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -39,7 +39,7 @@ target_compile_definitions(${COMPONENT1}
 )
 
 target_link_libraries(${COMPONENT1}
-	PRIVATE Poco::Data
+	PUBLIC Poco::Data
 )
 
 # target_include_directories(${COMPONENT1} PRIVATE ${SQLITE_MODERN_CPP_INCLUDE_DIRS})
@@ -191,4 +191,5 @@ add_executable(test
 
 target_link_libraries(test
 	PRIVATE ${COMPONENT1}
+	PRIVATE Poco::Data
 )

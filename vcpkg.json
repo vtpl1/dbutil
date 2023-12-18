@@ -1,12 +1,13 @@
 {
-	"name": "dbutil",
-	"version": "2.0.0",
-	"description": "A simple wrapper around poco data",
-	"homepage": "https://github.com/vtpl1/dbutil",
-	"builtin-baseline": "0e47c1985273129e4d0ee52ff73bed9125555de8",
-	"dependencies": [
-		{
-			"name": "poco"
-		}
-	]
+  "name": "dbutil",
+  "version": "2.0.0",
+  "description": "A simple wrapper around poco data",
+  "homepage": "https://github.com/vtpl1/dbutil",
+  "builtin-baseline": "9edb1b8e590cc086563301d735cae4b6e732d2d2",
+  "dependencies": [
+    {
+      "name": "poco",
+      "features": ["mysql", "sqlite3", "postgresql"]
+    }
+  ]
 }
